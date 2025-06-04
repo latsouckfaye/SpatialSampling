@@ -8,7 +8,7 @@
 
 <meta name="author" content="Paul FAYE">
 
-<title>Spatial sampling – SpatialSampling</title>
+<title>Spatial sampling – Spatial Sampling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -163,7 +163,7 @@ window.Quarto = {
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title">SpatialSampling</span>
+    <span class="navbar-title">Spatial Sampling</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -354,14 +354,6 @@ window.Quarto = {
 <section id="spatial-coverage-sampling-using-k-means" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="spatial-coverage-sampling-using-k-means"><span class="header-section-number">3.1</span> Spatial Coverage Sampling using K-means</h3>
 <p>The <code>scsKM</code> function selects sampling locations uniformly across the study area by applying the k-means clustering algorithm to the cells of a regular spatial grid <span class="citation" data-cites="Ha1975">(<a href="#ref-Ha1975" role="doc-biblioref">Hartigan 1975</a>)</span>. The clustering is performed using the spatial coordinates of the grid cell centers, aiming to minimize the Mean Squared Shortest Distance (MSSD) between these centers and the corresponding cluster centroids <span class="citation" data-cites="RoNy1998">(<a href="#ref-RoNy1998" role="doc-biblioref">Royle and Nychka 1998</a>)</span>. This approach ensures an approximately equal-area partitioning of the study region <span class="citation" data-cites="Br2019">(<a href="#ref-Br2019" role="doc-biblioref">Brus 2019</a>)</span>. For advanced customization and related functionality, users are referred to the <code>spcosa</code> R package.</p>
-</section>
-<section id="spatial-coverage-sampling-using-clara" class="level3" data-number="3.2">
-<h3 data-number="3.2" class="anchored" data-anchor-id="spatial-coverage-sampling-using-clara"><span class="header-section-number">3.2</span> Spatial Coverage Sampling using CLARA</h3>
-<p><code>scsCLARA</code> function computes a SCS using the CLARA algorithm instead the K-means algorithm <span class="citation" data-cites="KaRo1990">(<a href="#ref-KaRo1990" role="doc-biblioref">Kaufman and Rousseeuw 1975</a>)</span>. Like in <code>scsKM</code>, spatial coordinates of cells centers of a raster grid are used as variables. DBM at any resolution can be used as individuals which are then grouped into <span class="math inline">\(k\)</span> clusters. Clusters centroids are returned and correspond to sampling locations.</p>
-</section>
-<section id="complexity-dependent-sampling-using-clara" class="level3" data-number="3.3">
-<h3 data-number="3.3" class="anchored" data-anchor-id="complexity-dependent-sampling-using-clara"><span class="header-section-number">3.3</span> Complexity-dependent sampling using CLARA</h3>
-<p><code>cdCLARA</code> uses the CLARA algorithm to group DBM’s cells. Unlike <code>scsCLARA</code>, the covariate space is spanned by geomorphologic features. Depth and Roughness are used in the example below. Clusters centroids are returned and correspond to sampling locations.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -374,44 +366,84 @@ window.Quarto = {
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>scskm_plot <span class="ot">=</span> <span class="fu">plotPoints</span>(pvtscskm, Terrain_Attr_50_df[,<span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>, <span class="st">"rough"</span>)], Geyser_bathy)</span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"Geyser_scskm.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">800</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scskm_plot)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial Coverage Sampling using CLARA</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>pvtscscl <span class="ot">=</span> <span class="fu">scsCLARA</span>(<span class="at">data =</span> Terrain_Attr_50_df, <span class="at">var=</span><span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>), <span class="at">iter=</span><span class="dv">1</span>, <span class="at">sampsize=</span><span class="dv">50</span>, <span class="at">disT=</span><span class="st">"euclidean"</span>)</span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>pvtscscl<span class="sc">$</span>Method<span class="ot">=</span> <span class="st">"SCS-CLARA"</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>scscl_plot <span class="ot">=</span> <span class="fu">plotPoints</span>(pvtscscl, Terrain_Attr_50_df[,<span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>, <span class="st">"rough"</span>)], Geyser_bathy)</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"Geyser_scscl.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">800</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scscl_plot)</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Complexity-dependent sampling using CLARA</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>pvtcdcl <span class="ot">=</span> <span class="fu">cdCLARA</span>(<span class="at">data =</span> Terrain_Attr_50_df, <span class="at">var1=</span><span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>), <span class="at">var2 =</span><span class="fu">c</span>(<span class="st">"Prof_Moyenne"</span>, <span class="st">"rough"</span>) , <span class="at">iter=</span><span class="dv">12</span>, <span class="at">sampsize=</span><span class="dv">50</span>, <span class="at">disT=</span><span class="st">"manhattan"</span>)</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>pvtcdcl<span class="sc">$</span>Method<span class="ot">=</span> <span class="st">"CDS"</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>cds_plot <span class="ot">=</span> <span class="fu">plotPoints</span>(pvtcdcl, Terrain_Attr_50_df[,<span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>, <span class="st">"rough"</span>)], Geyser_bathy)</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"Geyser_cds.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">800</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
-<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cds_plot)</span>
-<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scskm_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"Geyser_scskm.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">800</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scskm_plot)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="columns">
-<div class="column" style="width:33%;">
-<p><img src="./Geyser_scskm.png" class="img-fluid"></p>
-</div><div class="column" style="width:33%;">
-<p><img src="./Geyser_scscl.png" class="img-fluid"></p>
-</div><div class="column" style="width:33%;">
-<p><img src="./Geyser_cds.png" class="img-fluid"></p>
+</section>
+<section id="spatial-coverage-sampling-using-clara" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="spatial-coverage-sampling-using-clara"><span class="header-section-number">3.2</span> Spatial Coverage Sampling using CLARA</h3>
+<p><code>scsCLARA</code> function computes a SCS using the CLARA algorithm instead the K-means algorithm <span class="citation" data-cites="KaRo1990">(<a href="#ref-KaRo1990" role="doc-biblioref">Kaufman and Rousseeuw 1975</a>)</span>. Like in <code>scsKM</code>, spatial coordinates of cells centers of a raster grid are used as variables. DBM at any resolution can be used as individuals which are then grouped into <span class="math inline">\(k\)</span> clusters. Clusters centroids are returned and correspond to sampling locations.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatial Coverage Sampling using CLARA</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>pvtscscl <span class="ot">=</span> <span class="fu">scsCLARA</span>(<span class="at">data =</span> Terrain_Attr_50_df, <span class="at">var=</span><span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>), <span class="at">iter=</span><span class="dv">1</span>, <span class="at">sampsize=</span><span class="dv">50</span>, <span class="at">disT=</span><span class="st">"euclidean"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>pvtscscl<span class="sc">$</span>Method<span class="ot">=</span> <span class="st">"SCS-CLARA"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>scscl_plot <span class="ot">=</span> <span class="fu">plotPoints</span>(pvtscscl, Terrain_Attr_50_df[,<span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>, <span class="st">"rough"</span>)], Geyser_bathy)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scscl_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"Geyser_scscl.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">800</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(scscl_plot)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="complexity-dependent-sampling-using-clara" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="complexity-dependent-sampling-using-clara"><span class="header-section-number">3.3</span> Complexity-dependent sampling using CLARA</h3>
+<p><code>cdCLARA</code> uses the CLARA algorithm to group DBM’s cells. Unlike <code>scsCLARA</code>, the covariate space is spanned by geomorphologic features. Depth and Roughness are used in the example below. Clusters centroids are returned and correspond to sampling locations.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Complexity-dependent sampling using CLARA</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>pvtcdcl <span class="ot">=</span> <span class="fu">cdCLARA</span>(<span class="at">data =</span> Terrain_Attr_50_df, <span class="at">var1=</span><span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>), <span class="at">var2 =</span><span class="fu">c</span>(<span class="st">"Prof_Moyenne"</span>, <span class="st">"rough"</span>) , <span class="at">iter=</span><span class="dv">12</span>, <span class="at">sampsize=</span><span class="dv">50</span>, <span class="at">disT=</span><span class="st">"manhattan"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pvtcdcl<span class="sc">$</span>Method<span class="ot">=</span> <span class="st">"CDS"</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>cds_plot <span class="ot">=</span> <span class="fu">plotPoints</span>(pvtcdcl, Terrain_Attr_50_df[,<span class="fu">c</span>(<span class="st">"Longitude"</span>, <span class="st">"Latitude"</span>, <span class="st">"rough"</span>)], Geyser_bathy)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cds_plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="st">"Geyser_cds.png"</span>, <span class="at">width =</span> <span class="dv">1000</span>, <span class="at">height =</span> <span class="dv">800</span>, <span class="at">res =</span> <span class="dv">150</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cds_plot)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">dev.off</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 </div>
 
 
@@ -532,7 +564,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/latsouckfaye\.github\.io\/SpatialSampling\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
